@@ -113,7 +113,7 @@ export function LatestProducts() {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
               </div>
               <p className="text-gray-500 text-sm animate-pulse">
                 جاري تحميل المنتجات...
@@ -131,7 +131,7 @@ export function LatestProducts() {
       <section className="py-3 md:py-10 bg-white">
         <div className="container-custom">
           <div className="mb-2 md:mb-5 flex justify-between mx-2 md:mx-4">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#112B40' }}>
+            <h2 className="text-xl md:text-2xl font-bold mb-3" style={{ color: '#112B40' }}>
               الاكثر طلبا
             </h2>
             
@@ -151,13 +151,13 @@ export function LatestProducts() {
       <div className="container-custom">
         {/* Header */}
         <div className="mb-2 md:mb-5 flex justify-between items-center mx-2 md:mx-4">
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#112B40' }}>
+          <h2 className="text-xl md:text-2xl font-bold" style={{ color: '#112B40' }}>
             الاكثر طلبا
           </h2>
      
             <Link 
               href="/products/new" 
-              className="text-[#E60076] text-[16px] font-bold hover:underline transition-all"
+              className="text-[#2ECC71] text-[14px] font-bold hover:underline transition-all"
             >
               عرض المزيد
             </Link>
@@ -186,7 +186,7 @@ export function LatestProducts() {
             <div className="flex flex-col items-center gap-2">
               <div className="relative">
                 <div className="w-8 h-8 border-3 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-8 h-8 border-3 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-8 h-8 border-3 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
               </div>
               <p className="text-gray-400 text-xs">جاري التحميل...</p>
             </div>
@@ -201,8 +201,8 @@ export function LatestProducts() {
               className="group px-8 py-6 text-base font-semibold transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: 'white',
-                color: '#E60076',
-                border: '2px solid #E60076',
+                color: '#1A834B',
+                border: '2px solid #1A834B',
                 borderRadius: '12px'
               }}
             >

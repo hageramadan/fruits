@@ -104,10 +104,10 @@ export function BestProducts() {
       <div className="container-custom">
         {/* Header */}
         <div className="mb-2 md:mb-5  flex  justify-between  mx-2 md:mx-4 ">
-          <h2 className="text-2xl md:text-3xl  font-bold mb-3" style={{ color: '#112B40' }}>
+          <h2 className="text-xl md:text-2xl  font-bold mb-3" style={{ color: '#112B40' }}>
            الأكثر طلبا
           </h2>
-        <p className="text-[#E60076] text-[16px] font-bold">
+        <p className="text-[#2ECC71] text-[16px] font-bold">
           عرض المزيد
         </p>
           

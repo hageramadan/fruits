@@ -87,7 +87,7 @@ export function CategoriesDragDrop() {
       <section className="py-2 md:py-5">
         <div className="container-custom px-4 sm:px-6">
           <div className="flex justify-center items-center h-[140px] md:h-[300px]">
-            <div className="animate-pulse text-[#E60076]">جاري التحميل...</div>
+            <div className="animate-pulse text-[#1A834B]">جاري التحميل...</div>
           </div>
         </div>
       </section>
@@ -106,7 +106,7 @@ export function CategoriesDragDrop() {
         {categories.length > 4 && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#E60076] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#be0063] transition-all duration-300 hidden xl:block"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#1A834B] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#be0063] transition-all duration-300 hidden xl:block"
             style={{ 
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               transform: 'translateX(50%) translateY(-50%)'
@@ -121,7 +121,7 @@ export function CategoriesDragDrop() {
         {categories.length > 4 && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#E60076] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#be0063] transition-all duration-300 hidden xl:block"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#1A834B] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#be0063] transition-all duration-300 hidden xl:block"
             style={{ 
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               transform: 'translateX(-50%) translateY(-50%)'
@@ -173,7 +173,7 @@ export function CategoriesDragDrop() {
                     {/* اسم الفئة في الأسفل */}
                     <div className="absolute bottom-0 left-0 right-0 ">
                       <h3 
-                        className="text-white text-[16px] font-bold bg-[#E6007699] py-1 md:py-2 w-full md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
+                        className="text-white text-[16px] font-bold bg-[#1A834B99] py-1 md:py-2 w-full md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
                       >
                         {category.name}
                       </h3>

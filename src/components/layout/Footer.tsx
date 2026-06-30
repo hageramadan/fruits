@@ -27,7 +27,7 @@ export function Footer() {
             <Link href="/" aria-label="home" className="font-bold">الرئيسية</Link>
             <Link href="/" aria-label="categories">الفئات</Link>
             <Link href="/" aria-label="contact">تواصل معنا</Link>
-            <Link href="/" aria-label="contact">تواصل معنا</Link>
+           
           </div>
 
         </div>

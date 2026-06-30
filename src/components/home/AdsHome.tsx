@@ -74,12 +74,12 @@ export function AdsHome() {
   // عرض شاشة تحميل
   if (loading) {
     return (
-      <section className="bg-[#FDF2F8]">
+      <section className="bg-[#EAFAF1]">
         <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-6 md:gap-10 min-h-[200px]">
           <div className="flex items-center justify-center w-full">
             <div className="relative">
               <div className="w-8 h-8 border-3 border-gray-200 rounded-full"></div>
-              <div className="absolute top-0 left-0 w-8 h-8 border-3 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+              <div className="absolute top-0 left-0 w-8 h-8 border-3 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@ export function AdsHome() {
   const hasTimer = timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0;
 
   return (
-    <section className="bg-[#FDF2F8]">
+    <section className="bg-[#EAFAF1]">
       <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-6 md:gap-10">
         
         {/* Left Content */}
@@ -158,7 +158,7 @@ export function AdsHome() {
             asChild
             aria-label='buy now'
             className="hidden sm:flex w-full sm:w-[150px] md:w-[180px] md:h-[60px] animate-in text-[11px] sm:text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-2 sm:mt-4"
-            style={{ backgroundColor: '#E60076' }}
+            style={{ backgroundColor: '#1A834B' }}
           >
             <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white">
               تسوق الان

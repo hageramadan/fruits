@@ -117,7 +117,7 @@ export function Navbar() {
           <Link 
             href="/" 
             className="text-[32px] font-bold transition-colors shrink-0"
-            style={{ color: '#E60076' }}
+            style={{ color: '#1A834B' }}
           >
             Logo
           </Link>
@@ -129,9 +129,9 @@ export function Navbar() {
                 <div key={link.href} className="relative" ref={categoriesRef}>
                   <button
                     aria-label="categories"
-                    className="flex items-center gap-1 text-[16px] transition-colors hover:text-[#E60076]"
+                    className="flex items-center gap-1 text-[16px] transition-colors hover:text-[#1A834B]"
                     style={{ 
-                      color: pathname.startsWith('/categories') ? '#E60076' : '#112B40',
+                      color: pathname.startsWith('/categories') ? '#1A834B' : '#112B40',
                       fontWeight: pathname.startsWith('/categories') ? '700' : '400'
                     }}
                     onClick={() => setShowDesktopCategoriesDropdown(!showDesktopCategoriesDropdown)}
@@ -142,7 +142,7 @@ export function Navbar() {
                   </button>
 
                   {/* Desktop Categories Dropdown - من API */}
-                  {showDesktopCategoriesDropdown && dropdownCategories.length > 0 && (
+                  {/* {showDesktopCategoriesDropdown && dropdownCategories.length > 0 && (
                     <div 
                       className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg border shadow-xl z-50 animate-in fade-in zoom-in-95 duration-200"
                       style={{ borderColor: '#e2e8f0' }}
@@ -156,7 +156,7 @@ export function Navbar() {
                             className="block px-4 py-2 text-[14px] transition-colors hover:bg-gray-50"
                             style={{ color: '#112B40' }}
                             onClick={() => setShowDesktopCategoriesDropdown(false)}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#E60076'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#1A834B'}
                             onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
                           >
                             {category.name}
@@ -164,15 +164,15 @@ export function Navbar() {
                         ))}
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[16px] transition-colors hover:text-[#E60076]"
+                  className="text-[16px] transition-colors hover:text-[#1A834B]"
                   style={{ 
-                    color: pathname === link.href ? '#E60076' : '#112B40',
+                    color: pathname === link.href ? '#1A834B' : '#112B40',
                     fontWeight: pathname === link.href ? '700' : '400'
                   }}
                 >
@@ -192,7 +192,7 @@ export function Navbar() {
                 aria-label="search"
                 onClick={() => setShowSearchInput(!showSearchInput)}
                 className="relative z-10 hover:bg-gray-100"
-                style={{ color: '#195073' }}
+                style={{ color: '#043018' }}
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -210,8 +210,8 @@ export function Navbar() {
                           placeholder="ابحث عن منتج..."
                           className="w-full h-11 pr-9 border-0 bg-white focus-visible:ring-1 focus-visible:ring-offset-0"
                           style={{ 
-                            color: '#195073',
-                            '--tw-ring-color': '#E60076'
+                            color: '#043018',
+                            '--tw-ring-color': '#1A834B'
                           } as React.CSSProperties}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
@@ -223,7 +223,7 @@ export function Navbar() {
                             onClick={() => setSearchQuery("")}
                             className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors"
                             style={{ color: '#94a3b8' }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#195073'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#043018'}
                             onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
                           >
                             <X className="h-4 w-4" />
@@ -243,10 +243,10 @@ export function Navbar() {
               asChild 
               className="relative hover:bg-gray-100"
               aria-label="favorites"
-              style={{ color: '#195073' }}
+              style={{ color: '#043018' }}
             >
               <Link href="/favorites" >
-                <span className="text-[12px] text-[#195073] me-1 font-bold">1</span>
+                <span className="text-[12px] text-[#043018] me-1 font-bold">1</span>
                 <Heart className="h-[20px] w-[20px]" />
               </Link>
             </Button>
@@ -257,10 +257,10 @@ export function Navbar() {
               size="icon" 
               asChild 
               className="relative hover:bg-gray-100"
-              style={{ color: '#195073' }}
+              style={{ color: '#043018' }}
             >
               <Link href="/cart" >
-                <span className="text-[12px] text-[#195073] me-1 font-bold">1</span>
+                <span className="text-[12px] text-[#043018] me-1 font-bold">1</span>
                 <ShoppingCart className="h-5 w-5" />
               </Link>
             </Button>
@@ -270,7 +270,7 @@ export function Navbar() {
               asChild 
               aria-label="login"
               className="hidden sm:inline-flex hover:bg-gray-100 gap-2"
-              style={{ color: '#195073' }}
+              style={{ color: '#043018' }}
             >
               <Link href="/auth/login">
                 <PiUserBold className="h-5 w-5" />
@@ -285,7 +285,7 @@ export function Navbar() {
             size="icon"
             aria-label="show menu"
             className="md:hidden hover:bg-gray-100"
-            style={{ color: '#195073' }}
+            style={{ color: '#043018' }}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Image src="/images/Menu.png" alt="Menu" className="w-[24px] h-[24px]" width={24} height={24} />}
@@ -319,7 +319,7 @@ export function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <div className="relative">
-                  <Heart className="h-5 w-5" style={{ color: '#195073' }} />
+                  <Heart className="h-5 w-5" style={{ color: '#043018' }} />
                 </div>
                 <span className="text-xs" style={{ color: '#112B40' }}>المفضلة</span>
               </Link>
@@ -330,7 +330,7 @@ export function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <div className="relative">
-                  <ShoppingCart className="h-5 w-5" style={{ color: '#195073' }} />
+                  <ShoppingCart className="h-5 w-5" style={{ color: '#043018' }} />
                 </div>
                 <span className="text-xs" style={{ color: '#112B40' }}>السلة</span>
               </Link>
@@ -340,7 +340,7 @@ export function Navbar() {
                 className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <User className="h-5 w-5" style={{ color: '#195073' }} />
+                <User className="h-5 w-5" style={{ color: '#043018' }} />
                 <span className="text-xs" style={{ color: '#112B40' }}>تسجيل دخول</span>
               </Link>
             </div>
@@ -359,7 +359,7 @@ export function Navbar() {
                       {link.name}
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showMobileCategoriesDropdown ? 'rotate-180' : ''}`} />
                     </button>
-                    {showMobileCategoriesDropdown && dropdownCategories.length > 0 && (
+                    {/* {showMobileCategoriesDropdown && dropdownCategories.length > 0 && (
                       <div className="mr-4 space-y-1">
                         {dropdownCategories.map((category) => (
                           <Link
@@ -371,14 +371,14 @@ export function Navbar() {
                               setMobileMenuOpen(false);
                               setShowMobileCategoriesDropdown(false);
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#E60076'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#1A834B'}
                             onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
                           >
                             {category.name}
                           </Link>
                         ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 ) : (
                   <Link
@@ -387,7 +387,7 @@ export function Navbar() {
                     className="px-3 py-3 text-[16px] font-medium rounded-md transition-colors hover:bg-gray-50"
                     style={{ color: '#112B40' }}
                     onClick={() => setMobileMenuOpen(false)}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#E60076'}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#1A834B'}
                     onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
                   >
                     {link.name}
