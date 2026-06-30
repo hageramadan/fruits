@@ -1,6 +1,7 @@
 // components/ProductSection.tsx
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { ProductCard } from "../products/ProductCard";
@@ -96,6 +97,23 @@ const STATIC_PRODUCTS: ProductCardType[] = [
   }
 ];
 
+// مكون Spinner
+function LoadingSpinner() {
+  return (
+    <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative">
+          <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <p className="text-gray-500 text-sm animate-pulse">
+          جاري تحميل المنتجات...
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function ProductSection({
   title,
   viewAllLink = "/products",
@@ -105,6 +123,24 @@ export function ProductSection({
   showLoadMore = false,
   maxProducts = 8
 }: ProductSectionProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+
+  // محاكاة تحميل المنتجات (في حالة البيانات الثابتة)
+  useEffect(() => {
+    // إذا كانت المنتجات موجودة، نبدأ التحميل
+    if (products.length > 0) {
+      // محاكاة تحميل أولي سريع
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 800);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsLoading(false);
+    }
+  }, [products]);
+
   // عرض عدد محدد من المنتجات
   const visibleProducts = products.slice(0, maxProducts);
   
@@ -114,6 +150,22 @@ export function ProductSection({
     3: "grid-cols-2 md:grid-cols-3",
     4: "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
   };
+
+  // إذا كان في حالة تحميل
+  if (isLoading) {
+    return (
+      <section className="py-3 md:py-10 bg-white">
+        <div className="container-custom">
+          <div className="mb-2 md:mb-5 flex justify-between items-center mx-2 md:mx-4">
+            <h2 className="text-xl md:text-2xl font-bold" style={{ color: '#112B40' }}>
+              {title}
+            </h2>
+          </div>
+          <LoadingSpinner />
+        </div>
+      </section>
+    );
+  }
 
   // إذا لم توجد منتجات
   if (products.length === 0) {
@@ -153,7 +205,7 @@ export function ProductSection({
           )}
         </div>
 
-        {/* Products Grid - إزالة justify-items-center */}
+        {/* Products Grid */}
         <div className={`grid ${gridCols[columns]} gap-3 md:gap-6 mb-2 md:mb-5`}>
           {visibleProducts.map((product, index) => (
             <div
