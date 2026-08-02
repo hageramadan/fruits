@@ -37,7 +37,7 @@ interface ProductVariant {
   attributes: VariantAttribute[];
 }
 
-//  تحديث واجهة Product لإضافة خصائص الفاريانتات
+//  تحديث واجهة Product لإضافة خصائص الفاريانتات والكمية
 interface Product {
   id: string;
   name: string;
@@ -60,6 +60,7 @@ interface Product {
     name: string;
     rate: number;
   };
+  quantity?: number | null; // ✅ إضافة الكمية
 }
 
 interface BestDiscountsProps {
@@ -132,7 +133,7 @@ const cleanImageUrl = (url: string) => {
   return `https://fakeha.admin.t-carts.com${url}`;
 };
 
-//  تحويل البيانات من API إلى شكل المنتج المطلوب مع دعم الفاريانتات
+//  تحويل البيانات من API إلى شكل المنتج المطلوب مع دعم الفاريانتات والكمية
 const transformProduct = (product: ProductData): Product => {
   const mainImage =
     product.images && product.images.length > 0
@@ -168,6 +169,16 @@ const transformProduct = (product: ProductData): Product => {
     colors = extractColorsFromVariants(product.variants as ProductVariant[]);
   }
 
+  // ✅ استخراج الكمية من المنتج
+  let quantity: number | null = null;
+  if (product.has_variants && product.variants && product.variants.length > 0) {
+    // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
+    quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
+  } else {
+    // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
+    quantity = product.quantity ?? null;
+  }
+
   return {
     id: product.id.toString(),
     name: product.name,
@@ -190,6 +201,7 @@ const transformProduct = (product: ProductData): Product => {
       name: "Egyptian Pound",
       rate: 1,
     },
+    quantity: quantity, // ✅ إضافة الكمية
   };
 };
 
@@ -213,7 +225,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
   const isMounted = useRef(true);
   const fetchingRef = useRef(false);
 
-  // ✅ استدعاء onLoad بعد تحميل البيانات
+  // ✅ استدعاء onLoad في useEffect وليس في render
   useEffect(() => {
     if (!isInitialLoading && !isDataLoaded && onLoad) {
       setIsDataLoaded(true);
@@ -325,7 +337,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#2ECC71] border-t-transparent rounded-full animate-spin"></div>
               </div>
             </div>
           </div>
@@ -342,7 +354,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#2ECC71] border-t-transparent rounded-full animate-spin"></div>
               </div>
             </div>
           </div>
@@ -351,19 +363,13 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
     );
   }
 
+  // ✅ من غير استدعاء onLoad هنا
   if (error && products.length === 0) {
-    if (!isDataLoaded && onLoad) {
-      setIsDataLoaded(true);
-      onLoad();
-    }
     return <></>;
   }
 
+  // ✅ من غير استدعاء onLoad هنا
   if (products.length === 0 && !isInitialLoading) {
-    if (!isDataLoaded && onLoad) {
-      setIsDataLoaded(true);
-      onLoad();
-    }
     return (
       <section className="py-6 md:py-12 bg-white">
         <div className="container-custom">
@@ -390,7 +396,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
           </div>
           <Link
             href="/products"
-            className="text-[#1A834B] text-xs lg:text-sm font-bold hover:underline transition-all duration-300"
+            className="text-[#2ECC71] text-xs lg:text-sm font-bold hover:underline transition-all duration-300"
           >
             {t.viewMore}
           </Link>
@@ -400,7 +406,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
         {isLoadingMore && (
           <div className="flex justify-center py-4 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#2ECC71] rounded-full animate-spin"></div>
               <span className="text-gray-500 text-sm">{t.loadingMore}</span>
             </div>
           </div>
@@ -433,7 +439,8 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
                 hasVariants={product.hasVariants || false}
                 variants={product.variants || []}
                 variantId={product.variantId || null}
-                currency={product.currency}
+                // currency={product.currency}
+                quantity={product.quantity} // ✅ تمرير الكمية إلى ProductCard
               />
             </div>
           ))}
@@ -447,8 +454,8 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
               className="px-6 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: "transparent",
-                color: "#1A834B",
-                border: "2px solid #1A834B",
+                color: "#2ECC71",
+                border: "2px solid #2ECC71",
                 borderRadius: "8px",
               }}
             >

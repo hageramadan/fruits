@@ -1,4 +1,5 @@
 // src/components/products/ProductCard.tsx
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -13,18 +14,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/hooks/useCurrency"; // ✅ استيراد useCurrency
 
 interface ColorOption {
   color: string;
   name: string;
-}
-
-//  إضافة واجهة العملة
-interface Currency {
-  code: string;
-  symbol: string;
-  name: string;
-  rate: number;
 }
 
 interface ProductCardProps {
@@ -43,10 +37,11 @@ interface ProductCardProps {
   variantId?: number | null;
   hasVariants?: boolean;
   variants?: Array<{ id: number }>;
-  currency?: Currency;
+  quantity?: number | null;
+  // ❌ إزالة currency من الـ Props
 }
 
-//  دالة للحصول على الترجمات حسب اللغة
+// دالة للحصول على الترجمات حسب اللغة
 const getTranslations = (lang: string) => {
   if (lang === 'en') {
     return {
@@ -59,6 +54,8 @@ const getTranslations = (lang: string) => {
       addedToCart: "Product added to cart successfully",
       errorAddingToCart: "Error adding product to cart",
       reviews: "reviews",
+      outOfStock: "Out of Stock",
+      productUnavailable: "Product is not available",
     };
   }
   // Arabic (default)
@@ -72,6 +69,8 @@ const getTranslations = (lang: string) => {
     addedToCart: "تم إضافة المنتج إلى السلة",
     errorAddingToCart: "حدث خطأ أثناء إضافة المنتج إلى السلة",
     reviews: "تقييمات",
+    outOfStock: "نفذ من المخزون",
+    productUnavailable: "المنتج نفذ من المخزون",
   };
 };
 
@@ -91,9 +90,10 @@ export function ProductCard({
   variantId = null,
   hasVariants = false,
   variants = [],
-  currency,
+  quantity,
 }: ProductCardProps) {
   const { language } = useLanguage();
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const t = getTranslations(language);
   
   const [isHovered, setIsHovered] = useState(false);
@@ -109,6 +109,9 @@ export function ProductCard({
   
   const isProductFavorite = isFavorite(id);
   const [localFavorite, setLocalFavorite] = useState(isProductFavorite);
+  
+  // التحقق من التوفر - الكمية null أو undefined أو 0 أو أقل
+  const isOutOfStock = quantity === null || quantity === undefined || quantity <= 0;
 
   // دالة لتوليد نجوم التقييم
   const renderStars = (rating: number) => {
@@ -171,17 +174,26 @@ export function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     
+    // ✅ التحقق من الكمية قبل الإضافة
+    if (isOutOfStock) {
+      toast.error(t.productUnavailable, {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+    
     if (isAddingToCart || cartLoading) return;
     
     const productId = parseInt(id);
-    const quantity = 1;
+    const quantityToAdd = 1;
     
     if (hasVariants && variants.length > 0) {
       const firstVariantId = variants[0].id;
       
       setIsAddingToCart(true);
       try {
-        await addItem(productId, quantity, firstVariantId);
+        await addItem(productId, quantityToAdd, firstVariantId);
         // toast.success(t.addedToCart, {
         //   duration: 2000,
         //   position: "bottom-right",
@@ -201,7 +213,7 @@ export function ProductCard({
     setIsAddingToCart(true);
     try {
       const finalVariantId = variantId || null;
-      await addItem(productId, quantity, finalVariantId);
+      await addItem(productId, quantityToAdd, finalVariantId);
       // toast.success(t.addedToCart, {
       //   duration: 2000,
       //   position: "bottom-right",
@@ -215,7 +227,7 @@ export function ProductCard({
     } finally {
       setIsAddingToCart(false);
     }
-  }, [id, variantId, hasVariants, variants, isAddingToCart, cartLoading, addItem, t]);
+  }, [id, variantId, hasVariants, variants, isAddingToCart, cartLoading, addItem, isOutOfStock, t]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -529,6 +541,47 @@ export function ProductCard({
             height: 20px;
           }
         }
+
+        .out-of-stock-overlay {
+          position: absolute;
+          inset: 0;
+          z-index: 25;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(2px);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+        }
+
+        .group:hover .out-of-stock-overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .out-of-stock-text {
+          font-size: 14px;
+          font-weight: 700;
+          color: white;
+          background: rgba(239, 68, 68, 0.9);
+          padding: 8px 16px;
+          border-radius: 8px;
+          transform: scale(0.9);
+          transition: transform 0.3s ease;
+        }
+
+        .group:hover .out-of-stock-text {
+          transform: scale(1);
+        }
+
+        @media (min-width: 640px) {
+          .out-of-stock-text {
+            font-size: 18px;
+            padding: 12px 24px;
+          }
+        }
       `}</style>
 
       <div className="product-card">
@@ -558,7 +611,7 @@ export function ProductCard({
               </div>
             )}
             
-            {/* Best Seller Badge -  استخدام الترجمة */}
+            {/* Best Seller Badge */}
             {isBestSeller && (
               <div className="absolute top-2 right-2 z-20">
                 <p className="badge">{t.bestSeller}</p>
@@ -572,23 +625,32 @@ export function ProductCard({
               </div>
             )}
 
-            {/* Add to Cart Button - Overlay on Image -  استخدام الترجمة */}
-            <div className="add-to-cart-overlay">
-              <button
-                onClick={handleAddToCart}
-                disabled={isAddingToCart || cartLoading}
-                className="add-to-cart-button"
-              >
-                {isAddingToCart || cartLoading ? (
-                  <div className="spinner-small border-white" />
-                ) : (
-                  <>
-                    <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>{t.addToCart}</span>
-                  </>
-                )}
-              </button>
-            </div>
+            {/* Out of Stock Overlay */}
+            {isOutOfStock && (
+              <div className="out-of-stock-overlay">
+                <div className="out-of-stock-text">{t.outOfStock}</div>
+              </div>
+            )}
+
+            {/* Add to Cart Button - Overlay on Image */}
+            {!isOutOfStock && (
+              <div className="add-to-cart-overlay">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isAddingToCart || cartLoading}
+                  className="add-to-cart-button"
+                >
+                  {isAddingToCart || cartLoading ? (
+                    <div className="spinner-small border-white" />
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span>{t.addToCart}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
 
             {/* Image */}
             <div className="relative w-full h-full">
@@ -608,7 +670,7 @@ export function ProductCard({
 
           {/* Product Info */}
           <div className="product-info">
-            {/* Rating -  استخدام الترجمة */}
+            {/* Rating */}
             <div className="rating-container">
               <div className="flex gap-0.5">
                 {renderStars(rating)}
@@ -626,7 +688,7 @@ export function ProductCard({
               {name}
             </h3>
 
-            {/* Price -  استخدام العملة */}
+            {/* Price - ✅ استخدام العملة من الـ Hook */}
             <div className="price-container">
               {originalPrice && originalPrice > price ? (
                 <>
@@ -636,14 +698,18 @@ export function ProductCard({
                   <span className="current-price">
                     {price.toLocaleString()}
                   </span>
-                  <span className="currency">{currency?.symbol || '$'}</span>
+                  <span className="currency">
+                    {currencyLoading ? '...' : currency || 'EGP'}
+                  </span>
                 </>
               ) : (
                 <>
                   <span className="current-price">
                     {price.toLocaleString()}
                   </span>
-                  <span className="currency">{currency?.symbol || '$'}</span>
+                  <span className="currency">
+                    {currencyLoading ? '...' : currency || 'EGP'}
+                  </span>
                 </>
               )}
             </div>

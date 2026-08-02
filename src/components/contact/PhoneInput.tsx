@@ -87,6 +87,19 @@ const countryCodes: CountryCode[] = [
     startsWithoutZero: ["5"],
     allowLeadingZero: true
   },
+  { 
+    code: "+965", 
+    countryKey: "Kuwait",
+    countryCode: "KW",
+    placeholder: "51234567",
+    example: "51234567",
+    pattern: /^(5[0-9]{7})|(5[0-9]{7})$/,
+    minLength: 8,
+    maxLength: 8,
+    startsWith: ["5"],
+    startsWithoutZero: ["5"],
+    allowLeadingZero: false
+  }
 ];
 
 //  دالة مساعدة لتنسيق رسالة الخطأ (مدعومة بالترجمة)

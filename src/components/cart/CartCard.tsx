@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { CartItemDisplay } from "./CartPage";
 import { useFavoritesContext } from "@/contexts/FavoritesContext";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency"; // ✅ إضافة استيراد useCurrency
 
 interface CartItemCardProps {
   item: CartItemDisplay;
@@ -37,7 +38,7 @@ const getColorDisplay = (colorName: string, colorHex?: string): string => {
     "ازرق فاتح": "#1e91eb",
     "ازرق داكن": "#252B42",
     بيج: "#bdae8c",
-    احمر: "#1A834B",
+    احمر: "#2ECC71",
     زيتوني: "#a4bfa8",
     رمادي: "#454545",
     بينك: "#d959c6",
@@ -56,6 +57,10 @@ export function CartItemCard({
   onRemove,
 }: CartItemCardProps) {
   const { t } = useTranslation();
+  const { currency, isLoading: currencyLoading } = useCurrency(); // ✅ استخدام الـ Hook
+  
+  // ✅ الحصول على رمز العملة
+  const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   
   const {
     id,
@@ -90,39 +95,39 @@ export function CartItemCard({
     }
   };
 
-const handleRemove = () => {
-  toast(
-    (toastInstance) => (  //  استخدام اسم مختلف بدلاً من t
-      <div className="flex flex-col gap-3 p-3" dir="rtl">
-        <p className="text-gray-800 text-sm font-medium">
-          {t('cart.confirmDelete')}{" "}
-          <span className="font-bold text-blue-500">{name}</span> {t('cart.fromCart')}
-        </p>
-        <div className="flex justify-center gap-3">
-          <button
-            onClick={() => {
-              toast.dismiss(toastInstance.id);
-              onRemove(id);
-            }}
-            className="px-4 py-1.5 bg-red-500 text-white text-sm rounded-[8px] hover:bg-red-600 transition font-medium"
-          >
-            {t('cart.yesDelete')}
-          </button>
-          <button
-            onClick={() => toast.dismiss(toastInstance.id)}
-            className="px-4 py-1.5 bg-gray-200 text-gray-700 text-sm rounded-[8px] hover:bg-gray-300 transition font-medium"
-          >
-            {t('cart.cancel')}
-          </button>
+  const handleRemove = () => {
+    toast(
+      (toastInstance) => (
+        <div className="flex flex-col gap-3 p-3" dir="rtl">
+          <p className="text-gray-800 text-sm font-medium">
+            {t('cart.confirmDelete')}{" "}
+            <span className="font-bold text-blue-500">{name}</span> {t('cart.fromCart')}
+          </p>
+          <div className="flex justify-center gap-3">
+            <button
+              onClick={() => {
+                toast.dismiss(toastInstance.id);
+                onRemove(id);
+              }}
+              className="px-4 py-1.5 bg-red-500 text-white text-sm rounded-[8px] hover:bg-red-600 transition font-medium"
+            >
+              {t('cart.yesDelete')}
+            </button>
+            <button
+              onClick={() => toast.dismiss(toastInstance.id)}
+              className="px-4 py-1.5 bg-gray-200 text-gray-700 text-sm rounded-[8px] hover:bg-gray-300 transition font-medium"
+            >
+              {t('cart.cancel')}
+            </button>
+          </div>
         </div>
-      </div>
-    ),
-    {
-      duration: 5000,
-      style: { maxWidth: "380px", padding: "0", borderRadius: "16px" },
-    },
-  );
-};
+      ),
+      {
+        duration: 5000,
+        style: { maxWidth: "380px", padding: "0", borderRadius: "16px" },
+      },
+    );
+  };
 
   return (
     <>
@@ -161,6 +166,7 @@ const handleRemove = () => {
                 originalPrice={originalPrice}
                 totalPrice={totalPrice}
                 quantity={quantity}
+                currencySymbol={currencySymbol} // ✅ تمرير رمز العملة
                 t={t}
               />
               <QuantityControlLarge
@@ -208,6 +214,7 @@ const handleRemove = () => {
                 originalPrice={originalPrice}
                 totalPrice={totalPrice}
                 quantity={quantity}
+                currencySymbol={currencySymbol} // ✅ تمرير رمز العملة
                 t={t}
               />
               <QuantityControlMobile
@@ -283,7 +290,7 @@ const ProductDetailsLarge = ({
   return (
     <div>
       <Link href={`/product/${id}`}>
-        <h1 className="text-lg font-semibold text-gray-800 hover:text-[#1A834B] transition">
+        <h1 className="text-lg font-semibold text-gray-800 hover:text-[#2ECC71] transition">
           {name}
         </h1>
       </Link>
@@ -338,28 +345,30 @@ const ProductPriceLarge = ({
   originalPrice,
   totalPrice,
   quantity,
+  currencySymbol, // ✅ استقبال رمز العملة
   t,
 }: {
   price: number;
   originalPrice?: number;
   totalPrice: number;
   quantity: number;
+  currencySymbol: string; // ✅ إضافة النوع
   t: any;
 }) => (
   <div className="flex flex-col gap-1">
     <div className="flex items-center gap-2">
       {originalPrice && originalPrice > price && (
         <span className="text-sm text-gray-400 line-through">
-          {originalPrice.toLocaleString()} {t('cart.currency')}
+          {originalPrice.toLocaleString()} {currencySymbol} {/* ✅ استخدام رمز العملة */}
         </span>
       )}
       <div className="text-xs text-gray-500">
-        {price.toLocaleString()} {t('cart.currency')} / {t('cart.perItem')}
+        {price.toLocaleString()} {currencySymbol} / {t('cart.perItem')} {/* ✅ استخدام رمز العملة */}
       </div>
     </div>
     <div className="flex items-center gap-0.5">
-      <span className="text-lg font-bold text-[#1A834B]">
-        {totalPrice.toLocaleString()} {t('cart.currency')}
+      <span className="text-lg font-bold text-[#2ECC71]">
+        {totalPrice.toLocaleString()} {currencySymbol} {/* ✅ استخدام رمز العملة */}
       </span>
       <span className="text-xs text-gray-400">({t('cart.total')})</span>
     </div>
@@ -379,7 +388,7 @@ const QuantityControlLarge = ({
     <button
       onClick={() => onUpdateQuantity(id, quantity - 1)}
       disabled={quantity <= 1}
-      className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#1A834B] transition rounded-full hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#2ECC71] transition rounded-full hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <FaMinus className="w-3 h-3" />
     </button>
@@ -388,7 +397,7 @@ const QuantityControlLarge = ({
     </span>
     <button
       onClick={() => onUpdateQuantity(id, quantity + 1)}
-      className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#1A834B] transition rounded-full hover:bg-white"
+      className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#2ECC71] transition rounded-full hover:bg-white"
     >
       <FaPlus className="w-3 h-3" />
     </button>
@@ -492,7 +501,7 @@ const ProductDetailsMobile = ({
   return (
     <div className="flex-1">
       <Link href={`/product/${id}`}>
-        <h1 className="text-sm font-semibold text-gray-800 hover:text-[#1A834B] transition line-clamp-1">
+        <h1 className="text-sm font-semibold text-gray-800 hover:text-[#2ECC71] transition line-clamp-1">
           {name}
         </h1>
       </Link>
@@ -550,27 +559,29 @@ const ProductPriceMobile = ({
   originalPrice,
   totalPrice,
   quantity,
+  currencySymbol, // ✅ استقبال رمز العملة
   t,
 }: {
   price: number;
   originalPrice?: number;
   totalPrice: number;
   quantity: number;
+  currencySymbol: string; // ✅ إضافة النوع
   t: any;
 }) => (
   <div className="flex flex-col">
     <div className="flex items-center gap-1.5">
       {originalPrice && originalPrice > price && (
         <span className="text-[10px] text-gray-400 line-through">
-          {originalPrice.toLocaleString()}
+          {originalPrice.toLocaleString()} {currencySymbol} {/* ✅ استخدام رمز العملة */}
         </span>
       )}
       <div className="text-[9px] text-gray-400">
-        {price.toLocaleString()} / {t('cart.perItem')}
+        {price.toLocaleString()} {currencySymbol} / {t('cart.perItem')} {/* ✅ استخدام رمز العملة */}
       </div>
     </div>
-    <span className="text-sm font-bold text-[#1A834B]">
-      {totalPrice.toLocaleString()} {t('cart.currency')}
+    <span className="text-sm font-bold text-[#2ECC71]">
+      {totalPrice.toLocaleString()} {currencySymbol} {/* ✅ استخدام رمز العملة */}
     </span>
   </div>
 );
@@ -589,7 +600,7 @@ const QuantityControlMobile = ({
       onClick={() => onUpdateQuantity(id, quantity - 1)}
       disabled={quantity <= 1}
       className={`w-6 h-6 flex items-center justify-center rounded-full transition ${
-        quantity <= 1 ? "text-gray-300" : "text-gray-600 hover:text-[#1A834B]"
+        quantity <= 1 ? "text-gray-300" : "text-gray-600 hover:text-[#2ECC71]"
       }`}
     >
       <FaMinus className="w-2 h-2" />
@@ -599,7 +610,7 @@ const QuantityControlMobile = ({
     </span>
     <button
       onClick={() => onUpdateQuantity(id, quantity + 1)}
-      className="w-6 h-6 flex items-center justify-center text-gray-600 hover:text-[#1A834B] transition rounded-full"
+      className="w-6 h-6 flex items-center justify-center text-gray-600 hover:text-[#2ECC71] transition rounded-full"
     >
       <FaPlus className="w-2 h-2" />
     </button>
@@ -624,7 +635,7 @@ const ActionButtonsMobile = ({
       onClick={onToggleFavorite}
       disabled={isMutating}
       className={`flex items-center gap-0.5 text-xs transition disabled:opacity-50 ${
-        isSaved ? "text-[#1A834B]" : "text-gray-400 hover:text-[#1A834B]"
+        isSaved ? "text-[#2ECC71]" : "text-gray-400 hover:text-[#2ECC71]"
       }`}
     >
       <Heart className={`w-3.5 h-3.5 ${isSaved ? "fill-current" : ""}`} />

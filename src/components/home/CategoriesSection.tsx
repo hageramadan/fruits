@@ -159,7 +159,7 @@ export function CategoriesSection({ onLoad }: CategoriesSectionProps) {
         {/* حاوية السحب الأفقية */}
         <div 
           ref={sliderRef}
-          className="overflow-x-auto pt-7 md:h-[300px] h-[140px] hide-scrollbar"
+          className="overflow-x-auto pt-7 md:h-[220px] h-[140px] hide-scrollbar"
           style={{ 
             width: '100%',
             overflowY: 'hidden',
@@ -181,12 +181,12 @@ export function CategoriesSection({ onLoad }: CategoriesSectionProps) {
                 className="flex-shrink-0 flex items-stretch transition-all duration-300 hover:-translate-y-2" 
               >
                 <Link  href={`/products?categories=[${category.id}]`} className="block w-full">
-                  <div className="relative w-[75px] md:w-[200px] h-[80px] md:h-[200px] overflow-hidden bg-[#F8F8F8] border-2 border-[#E4E7E9] hover:shadow-xl transition-all duration-300">
+                  <div className="relative w-[75px] md:w-[150px] h-[80px] md:h-[150px] overflow-hidden rounded-full bg-[#f8f8f88f] border-2 border-[#E4E7E9] hover:shadow-xl transition-all duration-300">
                     <Image
                       src={getFullImageUrl(category.image)}
                       alt={category.name}
                       fill
-                      className="object-contain p-2 transition-transform duration-500" 
+                      className="object-contain p-2 md:p-4 transition-transform duration-500" 
                       sizes="(max-width: 768px) 75px, 200px"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;

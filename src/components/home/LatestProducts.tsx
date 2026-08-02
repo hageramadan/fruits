@@ -129,6 +129,8 @@ const transformProduct = (product: ProductData): Product => {
     hasVariants: hasVariants,
     variants: variants,
     variantId: variantId,
+    // ✅ إضافة الكمية من البيانات المسترجعة
+    quantity: product.quantity ?? null,
   };
 };
 
@@ -232,7 +234,7 @@ export function LatestProducts({ onLoad }: LatestProductsProps) {
       <section className="py-2 md:py-12 bg-white">
         <div className="container-custom">
           <div className="flex flex-col justify-center items-center py-20 gap-4">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1A834B]"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#2ECC71]"></div>
           </div>
         </div>
       </section>
@@ -245,7 +247,7 @@ export function LatestProducts({ onLoad }: LatestProductsProps) {
       <section className="py-2 md:py-12 bg-white">
         <div className="container-custom">
           <div className="flex flex-col justify-center items-center py-20 gap-4">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1A834B]"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#2ECC71]"></div>
           </div>
         </div>
       </section>
@@ -316,6 +318,7 @@ export function LatestProducts({ onLoad }: LatestProductsProps) {
                 hasVariants={product.hasVariants || false}
                 variants={product.variants || []}
                 variantId={product.variantId || null}
+                quantity={product.quantity} // ✅ تمرير الكمية إلى ProductCard
               />
             </div>
           ))}
@@ -324,7 +327,7 @@ export function LatestProducts({ onLoad }: LatestProductsProps) {
         {/* Loading State for Load More -  استخدام الترجمة */}
         {isLoadingMore && (
           <div className="flex flex-col justify-center items-center py-8 gap-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A834B]"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2ECC71]"></div>
             <p className="text-gray-500 text-sm">{t.loading}</p>
           </div>
         )}

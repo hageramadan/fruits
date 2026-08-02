@@ -1151,6 +1151,22 @@ export async function loginWithEmail(data: LoginWithEmailRequest): Promise<AuthR
         data: results.data || null,
       };
     }
+ if (results.result && results.errNum === 200 && results.data) {
+      const token = results.data.token;
+      const user = results.data.user;
+      
+      if (token) {
+        // استخدام saveToken بدلاً من التخزين المباشر
+        saveToken(token);
+        console.log('✅ Token stored successfully:', token);
+      }
+      
+      if (user) {
+        // استخدام saveUserData للتخزين بشكل صحيح
+        saveUserData({ user: user });
+        console.log('✅ User data stored successfully:', user);
+      }
+    }
 
     // const result: AuthResponse = await response.json();
     return results;
@@ -1172,7 +1188,19 @@ export async function loginWithPhone(data: LoginWithPhoneRequest): Promise<AuthR
       headers: getHeaders(false),
       body: JSON.stringify(data),
     });
-    const results: AuthResponse = await response.json();
+    
+    // محاولة قراءة الرد
+    let results: AuthResponse;
+    try {
+      results = await response.json();
+    } catch (parseError) {
+      return {
+        result: false,
+        errNum: response.status,
+        message: `خطأ في استجابة الخادم (${response.status})`,
+        data: null,
+      };
+    }
 
     if (!response.ok) {
       return {
@@ -1181,6 +1209,22 @@ export async function loginWithPhone(data: LoginWithPhoneRequest): Promise<AuthR
         message: results.message || `فشل في تسجيل الدخول (${response.status})`,
         data: results.data || null,
       };
+    }
+
+    // ✅ التعديل: تخزين التوكن وبيانات المستخدم عند نجاح تسجيل الدخول
+    if (results.result && results.errNum === 200 && results.data) {
+      const token = results.data.token;
+      const user = results.data.user;
+      
+      if (token) {
+        saveToken(token);
+        console.log('✅ Token stored successfully:', token);
+      }
+      
+      if (user) {
+        saveUserData({ user: user });
+        console.log('✅ User data stored successfully:', user);
+      }
     }
 
     return results;
@@ -1363,10 +1407,7 @@ export async function changePassword(data: ChangePasswordRequest): Promise<Chang
   try {
     const response = await fetch(`${API_URL}/auth/change-password`, {
       method: 'POST',
-       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+       headers: getHeaders(),
       body: JSON.stringify(data),
     });
 

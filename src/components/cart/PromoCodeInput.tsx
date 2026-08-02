@@ -199,14 +199,14 @@ export function PromoCodeInput({ onApply, onRemove, appliedCode }: PromoCodeInpu
           }}
           placeholder={t('promoCode.placeholder')}
           disabled={isLoading}
-          className={`px-2 md:px-4 py-2.5 w-[90%] lg:w-full border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#1A834B] focus:border-transparent text-sm disabled:bg-gray-100 ${
+          className={`px-2 md:px-4 py-2.5 w-[90%] lg:w-full border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#2ECC71] focus:border-[#2ECC71] text-sm disabled:bg-gray-100 ${
             error ? 'border-red-500' : 'border-gray-200'
           }`}
         />
         <button
           onClick={handleApply}
           disabled={!code.trim() || isLoading}
-          className="px-3 md:px-5 w-fit md:py-2.5 bg-[#1A834B] text-white rounded-[8px] text-sm font-semibold hover:bg-[#2ECC71] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-3 md:px-5 w-fit md:py-2.5 bg-[#2ECC71] text-white rounded-[8px] text-sm font-semibold hover:bg-[#2ECC71] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
           {isLoading ? t('promoCode.applying') : t('promoCode.apply')}

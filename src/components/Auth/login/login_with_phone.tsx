@@ -98,7 +98,7 @@ export default function LoginWithPhone() {
       //  التوجيه إلى صفحة OTP بعد تسجيل الدخول
       const fullPhone = `${formData.countryCode}${formData.phoneNumber}`;
       setTimeout(() => {
-        router.push(`/auth/verify-otp/phone?phone=${encodeURIComponent(fullPhone)}&isLogin=true`);
+        router.push(`/`);
       }, 1500);
     } else {
       toast.error(result.message || "فشل تسجيل الدخول. يرجى التحقق من بياناتك", {
@@ -185,7 +185,7 @@ export default function LoginWithPhone() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition font-medium ${
+                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#2ECC71] text-white rounded-[8px] hover:bg-[#2ECC71] transition font-medium ${
                     isLoading ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
@@ -206,7 +206,7 @@ export default function LoginWithPhone() {
                     <button
                       type="button"
                       onClick={() => router.push("/auth/register/phone")}
-                      className="text-[#1A834B] font-medium hover:underline"
+                      className="text-[#2ECC71] font-medium hover:underline"
                     >
                       إنشاء حساب جديد
                     </button>

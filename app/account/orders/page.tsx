@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import Pagination from '@/components/products/Pagination';
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
-
+import { useCurrency } from "@/hooks/useCurrency";
 // ========== تعريف الأنواع ==========
 type OrderStatus = 
   | "ordered"
@@ -360,10 +360,12 @@ type FilterStatus = "all" | OrderStatus;
 
 export default function OrdersPage() {
   const { t } = useTranslation();
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+   const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   const [pagination, setPagination] = useState<PaginationData>({
     current_page: 1,
     last_page: 1,
@@ -485,7 +487,7 @@ export default function OrdersPage() {
         <div className="container mx-auto px-4 py-8 text-center">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A834B] mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2ECC71] mx-auto"></div>
             </div>
           </div>
         </div>
@@ -498,7 +500,7 @@ export default function OrdersPage() {
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
         {/* العنوان */}
         <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-          <Package className="w-6 h-6 sm:w-7 sm:h-7 text-[#1A834B]" />
+          <Package className="w-6 h-6 sm:w-7 sm:h-7 text-[#2ECC71]" />
           <h1 className="text-xl sm:text-xl font-bold text-gray-800">
             {t('orders.title')}
           </h1>
@@ -514,7 +516,7 @@ export default function OrdersPage() {
               }}
               className={`whitespace-nowrap px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition ${
                 filterStatus === filter.value
-                  ? "bg-[#1A834B] text-white"
+                  ? "bg-[#2ECC71] text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
               }`}
             >
@@ -535,7 +537,7 @@ export default function OrdersPage() {
               </p>
               <Link
                 href="/products"
-                className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#2ECC71] transition-all duration-300 shadow-md hover:shadow-lg"
+                className="inline-block bg-[#2ECC71] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#2ECC71] transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 {t('orders.shopNow')}
               </Link>
@@ -577,7 +579,7 @@ export default function OrdersPage() {
                                 </span>
                               </p>
                               <IoCopyOutline
-                                className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer hover:text-[#1A834B] transition"
+                                className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer hover:text-[#2ECC71] transition"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   copyOrderNumber(order.orderNumber);
@@ -661,7 +663,7 @@ export default function OrdersPage() {
                                       href={`/account/orders/${order.id}`}
                                       className="hover:underline"
                                     >
-                                      <p className="font-medium text-gray-800 text-sm sm:text-base cursor-pointer hover:text-[#1A834B] transition">
+                                      <p className="font-medium text-gray-800 text-sm sm:text-base cursor-pointer hover:text-[#2ECC71] transition">
                                         {item.title}
                                       </p>
                                     </Link>
@@ -698,13 +700,13 @@ export default function OrdersPage() {
                                     <div className="flex flex-wrap gap-2 sm:gap-3 mt-1 text-[10px] sm:text-xs text-gray-500">
                                       <span>{t('orders.quantity')}: x{item.quantity}</span>
                                       <span>
-                                        {t('orders.price')}: $ {item.unit_price.toFixed(2)}
+                                        {t('orders.price')}: {currencySymbol} {item.unit_price.toFixed(2)}
                                       </span>
                                     </div>
                                   </div>
                                   <div className="text-left sm:text-right">
                                     <p className="font-semibold text-[#000000] text-sm sm:text-base">
-                                      $ {item.total_price.toFixed(2)}
+                                      {currencySymbol} {item.total_price.toFixed(2)}
                                     </p>
                                   </div>
                                 </div>
@@ -716,7 +718,7 @@ export default function OrdersPage() {
                       <div className="pt-2 sm:pt-3 flex justify-between items-center">
                         <Link
                           href={`/account/orders/${order.id}`}
-                          className="text-[#1A834B] text-sm sm:text-base font-medium hover:underline"
+                          className="text-[#2ECC71] text-sm sm:text-base font-medium hover:underline"
                         >
                           {t('orders.viewDetails')}
                         </Link>
@@ -724,9 +726,9 @@ export default function OrdersPage() {
                           <p className="text-xs sm:text-sm text-gray-500">
                             {t('orders.total')}
                           </p>
-                          <p className="text-base sm:text-xl font-bold text-[#1A834B]">
-                            <span className="text-xs md:text-base font-bold text-[#1A834B]">
-                              $
+                          <p className="text-base sm:text-xl font-bold text-[#2ECC71]">
+                            <span className="text-xs md:text-base font-bold text-[#2ECC71]">
+                              {currencySymbol}
                             </span>
                             {order.total_amount.toFixed(2)}
                           </p>

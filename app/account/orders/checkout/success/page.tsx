@@ -9,7 +9,7 @@ export default function CheckoutSuccessPage() {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-[#EC221F] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           {/* <h2 className="text-2xl font-bold text-gray-800 mb-2">جاري التحميل...</h2> */}
-          <p className="text-gray-500">يرجى الانتظار</p>
+          {/* <p className="text-gray-500">يرجى الانتظار</p> */}
         </div>
       </div>
     }>

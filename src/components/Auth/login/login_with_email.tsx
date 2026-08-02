@@ -44,7 +44,7 @@ export default function LoginWithEmail() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
-      toast.error(Object.values(errors)[0]);
+      // toast.error(Object.values(errors)[0]);
       return;
     }
 
@@ -53,11 +53,11 @@ export default function LoginWithEmail() {
 
     if (result.success) {
       toast.success(result.message || t("auth.loginSuccess"), {
-        duration: 3000,
+        duration: 1000,
       });
       
       setTimeout(() => {
-        router.push(`/auth/verify-otp/email?email=${encodeURIComponent(formData.email)}&isLogin=true`);
+        router.push(`/`);
       }, 1500);
     } else {
       toast.error(result.message || t("auth.loginFailed"));
@@ -124,7 +124,7 @@ export default function LoginWithEmail() {
               <button
                 type="button"
                 onClick={() => router.push("/auth/forgot-password")}
-                className="text-sm text-[#1A834B] hover:underline"
+                className="text-sm text-[#2ECC71] hover:underline"
               >
                 {t("auth.forgotPassword")}
               </button>
@@ -133,7 +133,7 @@ export default function LoginWithEmail() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition disabled:opacity-50"
+              className="w-full py-3 bg-[#2ECC71] text-white rounded-[8px] hover:bg-[#2ECC71] transition disabled:opacity-50"
             >
               {isLoading ? t("auth.loggingIn") : t("auth.login")}
             </button>
@@ -144,7 +144,7 @@ export default function LoginWithEmail() {
                 <button
                   type="button"
                   onClick={() => router.push("/auth/register/email")}
-                  className="text-[#1A834B] font-medium hover:underline"
+                  className="text-[#2ECC71] font-medium hover:underline"
                 >
                   {t("auth.register")}
                 </button>
