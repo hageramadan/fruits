@@ -18,6 +18,9 @@
     "shopNow": "Shop Now"
   },
   "auth": {
+    
+    "enterPhoneNumber": "Enter your phone number ",
+    "phoneNumber": "Phone Number",
      "resetTokenNotFound": "Verification code not found. Please try again",
     "emailMismatch": "Email mismatch. Please try again",
     "unexpectedError": "An unexpected error occurred",

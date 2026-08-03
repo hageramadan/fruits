@@ -18,6 +18,9 @@
     "shopNow": "تسوق الان"
   },
   "auth": {
+    "enterPhoneNumber": "أدخل رقم هاتفك",
+
+    "phoneNumber": "رقم الهاتف",
         "resetTokenNotFound": "رمز التحقق غير موجود. يرجى المحاولة مرة أخرى",
     "emailMismatch": "البريد الإلكتروني غير متطابق. يرجى المحاولة مرة أخرى",
     "unexpectedError": "حدث خطأ غير متوقع",
